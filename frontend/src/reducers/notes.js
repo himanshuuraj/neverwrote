@@ -24,6 +24,16 @@ function reducer(state, action) {
       notesObj[action.notebookId] = action.notesList;
       notesObj = _.cloneDeep(notesObj);
       return Object.assign({}, state, { notesObj : notesObj });
+    case "TOGGLE_CONTENT":
+      notesObj = state.notesObj;
+      let notesList = notesObj[action.notebookId];
+      notesList = notesList.map(item => {
+        if(item.id == action.noteId)
+          item['showContent'] = !item["showContent"];
+        return item;
+      });
+      notesObj = _.cloneDeep(notesObj);
+      return Object.assign({}, state, { notesObj });
     default: return state;
   }
 }
@@ -39,10 +49,22 @@ let updateNotesList = (notebookId, notesList) => {
 let getListOfNotes = (notebookId) => {
   return (dispatch) => {
     api.get('/notebooks/' + notebookId + '/notes').then(notesList => {
+      notesList = notesList.map(item => {
+        item['showContent'] = false;
+        return item;
+      });
       dispatch(updateNotesList(notebookId, notesList));
     }).catch(err => {
       alert(JSON.stringify(err));
     });
+  }
+}
+
+let toggleContent = (notebookId, noteId) => {
+  return {
+    type : "TOGGLE_CONTENT",
+    notebookId,
+    noteId
   }
 }
 
@@ -68,7 +90,7 @@ let updateNotes = (note) => {
 
 let deleteNotes = (note) => {
   return (dispatch) => {
-      api.delete('/'+ note.id).then(notebookList => {
+      api.delete('/notes/'+ note.id).then(notebookList => {
         dispatch(notebooksReducer.getNotebookList(note.notebookId));
       }).catch(err => {
         alert(JSON.stringify(err));
@@ -83,5 +105,6 @@ module.exports = {
   createNotes,
   updateNotes,
   deleteNotes,
-  getListOfNotes
+  getListOfNotes,
+  toggleContent
 };

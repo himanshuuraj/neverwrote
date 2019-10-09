@@ -30,11 +30,11 @@ class NotebookList extends React.Component {
     return (
       <div>
         <h2>Notebooks</h2>
-        <div>
+        <div className="container">
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
-            this.props.notebookList.map((item, index) => <div
+            this.props.notebookList.map((item, index) => <div className="container"
               style={{padding: 10,backgroundColor: "antiquewhite", marginBottom : 10, borderRadius : 4}}
               onClick={(e) => {
                 this.props.toggleNotes(item.id);
@@ -42,20 +42,81 @@ class NotebookList extends React.Component {
                 console.log("EEEEEE", e);
               }}
               key={index}>
-                { item.title }
-                {
-                  item.showNotes && 
-                    this.props.notesObj[item.id] &&
-                      this.props.notesObj[item.id].map((note, index1) => (
-                        <div onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                         key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
-                          { note.title }
+                <div className="container">
+                  <div className="row">
+                    <div className="col-sm-8">
+                      { item.title }
+                    </div>
+                    <div className="col-sm-4">
+                      <div className="row">
+                        <div className="col-sm-6" onClick={e => {
+                          
+                        }}>
+                          <u>Edit</u>
                         </div>
-                      )
-                  )
-                }
+                        <div className="col-sm-6" onClick={e => {
+                          this.props.deleteNoteBook(item);
+                        }}>
+                          <u>Delete</u>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-8">
+                    {
+                        item.showNotes && 
+                          this.props.notesObj[item.id] &&
+                            this.props.notesObj[item.id].map((note, index1) => (
+                              <div className="container" onClick={(e) => {
+                                this.props.toggleContent(item.id, note.id);
+                                e.stopPropagation();
+                              }}
+                              key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
+                                <div className="container">
+                                  <div className="row">
+                                    <div className="col-sm-8">
+                                      { note.title }
+                                    </div>
+                                    <div className="col-sm-4">
+                                      <div className="row">
+                                        <div className="col-sm-6" onClick={e => {
+                                          
+                                        }}>
+                                          <u>Edit</u>
+                                        </div>
+                                        <div className="col-sm-6" onClick={e => {
+                                          e.stopPropagation();
+                                          this.props.deleteNotes(note);
+                                        }}>
+                                          <u>Delete</u>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div className="row">
+                                      {
+                                        note.showContent && (
+                                          <div style={{
+                                            background: 'beige',
+                                            padding: 10
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                          }}>
+                                            { note.content }
+                                          </div>
+                                        )
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          )
+                      }
+                      </div>
+                    </div>
+                </div>
               </div>
             )
         }
@@ -75,7 +136,10 @@ const NotebookListContainer = ReactRedux.connect(
       {
         getNotebookList : notebooksActionCreators.getNotebookList,
         getListOfNotes : notesActionCreators.getListOfNotes,
-        toggleNotes : notebooksActionCreators.toggleNotes
+        toggleNotes : notebooksActionCreators.toggleNotes,
+        toggleContent : notesActionCreators.toggleContent,
+        deleteNoteBook : notebooksActionCreators.deleteNoteBook,
+        deleteNotes : notesActionCreators.deleteNotes
       },
       dispatch
     )
