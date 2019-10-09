@@ -49,12 +49,17 @@ class NotebookList extends React.Component {
                     </div>
                     <div className="col-sm-4">
                       <div className="row">
-                        <div className="col-sm-6" onClick={e => {
+                        <div className="col-sm-4" onClick={e => {
+                          
+                        }}>
+                          <u>Add Notes</u>
+                        </div>
+                        <div className="col-sm-4" onClick={e => {
                           
                         }}>
                           <u>Edit</u>
                         </div>
-                        <div className="col-sm-6" onClick={e => {
+                        <div className="col-sm-4" onClick={e => {
                           this.props.deleteNoteBook(item);
                         }}>
                           <u>Delete</u>
