@@ -21,8 +21,8 @@ function reducer(state, action) {
       return Object.assign({}, state, { notebookList : action.notebookList });
     case "UPDATE_NOTES_LIST":
       let notesObj = state.notesObj;
-      notesObj[action.notebookId] = action.notebookList;
-      notesObj = _.cloneDeep(obj);
+      notesObj[action.notebookId] = action.notesList;
+      notesObj = _.cloneDeep(notesObj);
       return Object.assign({}, state, { notesObj : notesObj });
     default: return state;
   }
@@ -79,7 +79,7 @@ let deleteNotes = (note) => {
 
 // Export the action creators and reducer
 module.exports = {
-  notebooks : reducer,
+  notes : reducer,
   createNotes,
   updateNotes,
   deleteNotes,

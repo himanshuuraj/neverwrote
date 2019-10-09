@@ -4,7 +4,7 @@ const Redux = require('redux');
 
 const createActionDispatchers = require('../helpers/createActionDispatchers');
 const notebooksActionCreators = require('../reducers/notebooks');
-const notedActionCreators = require('../reducers/notes');
+const notesActionCreators = require('../reducers/notes');
 
 /*
   *** TODO: Build more functionality into the NotebookList component ***
@@ -30,28 +30,36 @@ class NotebookList extends React.Component {
     return (
       <div>
         <h2>Notebooks</h2>
+        <div>
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
-            this.props.notebookList.map((item, index) => <ul  
-              onClick={() => {
+            this.props.notebookList.map((item, index) => <div
+              style={{padding: 10,backgroundColor: "antiquewhite", marginBottom : 10, borderRadius : 4}}
+              onClick={(e) => {
+                this.props.toggleNotes(item.id);
                 this.props.getListOfNotes(item.id);
+                console.log("EEEEEE", e);
               }}
               key={index}>
-                <ul>
                 { item.title }
                 {
-                  item.notes && item.notes.length > 0 && (
-                  item.notes.map((note, index1) => <ol key={index1}>
-                    {index1 + " " + note.title }
-                    { note.content }
-                  </ol>
-                  ))
+                  item.showNotes && 
+                    this.props.notesObj[item.id] &&
+                      this.props.notesObj[item.id].map((note, index1) => (
+                        <div onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                         key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
+                          { note.title }
+                        </div>
+                      )
+                  )
                 }
-                </ul>
-              </ul>
+              </div>
             )
         }
+        </div>
       </div>
     );
   }
@@ -59,23 +67,18 @@ class NotebookList extends React.Component {
 
 const NotebookListContainer = ReactRedux.connect(
   state => ({
-    notebookList: state.notebooks.notebookList
+    notebookList: state.notebooks.notebookList,
+    notesObj: state.notes.notesObj
   }),
   (dispatch) =>
     Redux.bindActionCreators(
       {
         getNotebookList : notebooksActionCreators.getNotebookList,
-        getListOfNotes : notedActionCreators.getListOfNotes
+        getListOfNotes : notesActionCreators.getListOfNotes,
+        toggleNotes : notebooksActionCreators.toggleNotes
       },
       dispatch
     )
 )(NotebookList);
-
-// const NotebookListContainer = ReactRedux.connect(
-//   state => ({
-//     notebooks: state.notebooks
-//   }),
-//   createActionDispatchers(notebooksActionCreators)
-// )(NotebookList);
 
 module.exports = NotebookListContainer;

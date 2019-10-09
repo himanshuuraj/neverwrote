@@ -18,14 +18,15 @@ function reducer(state, action) {
     /* *** TODO: Put per-action code here *** */
     case "UPDATE_NOTEBOOK_LIST":
       return Object.assign({}, state, { notebookList : action.notebookList });
-    // case "UPDATE_NOTES_LIST":
-    //   let notebookList = state.notebookList;
-    //   notebookList.map(item => {
-    //     if(item.id == action.notebookId)
-    //       item["notes"] = action.notesList;
-    //   });
-    //   notebookList = _.cloneDeep(notebookList);
-    //   return Object.assign({}, state, { notebookList });
+    case "TOGGLE_NOTES":
+      let notebookList = state.notebookList;
+      notebookList = notebookList.map(item => {
+        if(item.id == action.notebookId)
+          item['showNotes'] = !item["showNotes"];
+        return item;
+      });
+      notebookList = _.cloneDeep(notebookList);
+      return Object.assign({}, state, { notebookList })
 
     default: return state;
   }
@@ -38,9 +39,20 @@ let updateNotebooks = notebookList => {
   }
 }
 
+let toggleNotes = notebookId => {
+  return {
+    type : "TOGGLE_NOTES",
+    notebookId
+  }
+}
+
 let getNotebookList = () => {
   return (dispatch) => {
       api.get('/notebooks').then(notebookList => {
+        notebookList = notebookList.map(item => {
+          item['showNotes'] = false;
+          return item;
+        });
         dispatch(updateNotebooks(notebookList));
       }).catch(err => {
         alert(JSON.stringify(err));
@@ -87,5 +99,6 @@ module.exports = {
   getNotebookList,
   createNoteBook,
   updateNoteBook,
-  deleteNoteBook
+  deleteNoteBook,
+  toggleNotes
 };
