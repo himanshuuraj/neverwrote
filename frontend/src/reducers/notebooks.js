@@ -5,10 +5,6 @@ const api = require('../helpers/api');
 /* *** TODO: Put action constants here *** */
 
 const initialState = {
-  data: [
-    { id: 100, title: 'From Redux Store: A hard-coded notebook' },
-    { id: 101, title: 'From Redux Store: Another hard-coded notebook' },
-  ]
 };
 
 // Function which takes the current data state and an action,
@@ -41,7 +37,7 @@ let updateNotebooks = notebookList => {
   }
 }
 
-let updateNotes = (notebookId, notesList) => {
+let updateNotesList = (notebookId, notesList) => {
   return {
     type : "UPDATE_NOTES_LIST",
     notebookId,
@@ -62,22 +58,52 @@ let getNotebookList = () => {
 let getListOfNotes = (notebookId) => {
   return (dispatch) => {
     api.get('/notebooks/' + notebookId + '/notes').then(notesList => {
-      dispatch(updateNotes(notebookId, notesList));
+      dispatch(updateNotesList(notebookId, notesList));
     }).catch(err => {
       alert(JSON.stringify(err));
     });
   }
 }
 
+let createNoteBook = (notebook) => {
+  return (dispatch) => {
+      api.post('/notebooks', notebook).then(notebook => {
+        dispatch(getNotebookList());
+      }).catch(err => {
+        alert(JSON.stringify(err));
+      })
+    }
+};
+
+let updateNoteBook = (notebook) => {
+  return (dispatch) => {
+      api.put('/notebooks/'+ notebook.id).then(notebook => {
+        dispatch(getNotebookList());
+      }).catch(err => {
+        alert(JSON.stringify(err));
+      })
+    }
+};
+
+let deleteNoteBook = (notebook) => {
+  return (dispatch) => {
+      api.delete('/notebooks/'+ notebook.id).then(notebook => {
+        dispatch(getNotebookList());
+      }).catch(err => {
+        alert(JSON.stringify(err));
+      })
+    }
+};
+
 // Action creators
 /* *** TODO: Put action creators here *** */
-export const getData = () => {
-
-}
 
 // Export the action creators and reducer
 module.exports = {
   notebooks : reducer,
   getNotebookList,
-  getListOfNotes
+  getListOfNotes,
+  createNoteBook,
+  updateNoteBook,
+  deleteNoteBook
 };
