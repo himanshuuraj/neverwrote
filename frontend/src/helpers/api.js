@@ -8,9 +8,9 @@ const ajax = require('./ajax');
 const api = {};
 
 if(process.env.IN_BROWSER) {
-  api.baseUrl = '/api';
+  api.baseUrl = 'http://localhost/api';
 } else {
-  api.baseUrl = 'http://api:3000';
+  api.baseUrl = 'http://localhost/api:3000';
 }
 
 api.get = function(path) {

@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.get('/:notebookId/notes', (req, res) => {
   let notebookId = req.params.notebookId;
-  models.Note.find({
+  models.Note.findAll({
     where: {
        notebookId : notebookId
     }

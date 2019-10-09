@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactRedux = require('react-redux');
+const Redux = require('redux');
 
 const createActionDispatchers = require('../helpers/createActionDispatchers');
 const notebooksActionCreators = require('../reducers/notebooks');
@@ -11,6 +12,11 @@ const notebooksActionCreators = require('../reducers/notebooks');
   you will need to build upon it in order to complete the assignment.
 */
 class NotebookList extends React.Component {
+
+  componentDidMount(){
+    this.props.getNotebookList();
+  }
+
   render() {
     const createNotebookListItem = (notebook) => {
       return (
@@ -23,9 +29,28 @@ class NotebookList extends React.Component {
     return (
       <div>
         <h2>Notebooks</h2>
-        <ul>
-          {this.props.notebooks.data.map(createNotebookListItem)}
-        </ul>
+        {
+            this.props.notebookList &&
+            this.props.notebookList.length > 0 && 
+            this.props.notebookList.map((item, index) => <ul  
+              onClick={() => {
+                this.props.getListOfNotes(item.id);
+              }}
+              key={index}>
+                <ul>
+                { item.title }
+                {
+                  item.notes && item.notes.length > 0 && (
+                  item.notes.map((note, index1) => <ol key={index1}>
+                    {index1 + " " + note.title }
+                    { note.content }
+                  </ol>
+                  ))
+                }
+                </ul>
+              </ul>
+            )
+        }
       </div>
     );
   }
@@ -33,9 +58,23 @@ class NotebookList extends React.Component {
 
 const NotebookListContainer = ReactRedux.connect(
   state => ({
-    notebooks: state.notebooks
+    notebookList: state.notebooks.notebookList
   }),
-  createActionDispatchers(notebooksActionCreators)
+  (dispatch) =>
+    Redux.bindActionCreators(
+      {
+        getNotebookList : notebooksActionCreators.getNotebookList,
+        getListOfNotes : notebooksActionCreators.getListOfNotes
+      },
+      dispatch
+    )
 )(NotebookList);
+
+// const NotebookListContainer = ReactRedux.connect(
+//   state => ({
+//     notebooks: state.notebooks
+//   }),
+//   createActionDispatchers(notebooksActionCreators)
+// )(NotebookList);
 
 module.exports = NotebookListContainer;
