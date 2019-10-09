@@ -5,6 +5,7 @@ const api = require('../helpers/api');
 /* *** TODO: Put action constants here *** */
 
 const initialState = {
+  notebookList : []
 };
 
 // Function which takes the current data state and an action,
@@ -17,14 +18,14 @@ function reducer(state, action) {
     /* *** TODO: Put per-action code here *** */
     case "UPDATE_NOTEBOOK_LIST":
       return Object.assign({}, state, { notebookList : action.notebookList });
-    case "UPDATE_NOTES_LIST":
-      let notebookList = state.notebookList;
-      notebookList.map(item => {
-        if(item.id == action.notebookId)
-          item["notes"] = action.notesList;
-      });
-      notebookList = _.cloneDeep(notebookList);
-      return Object.assign({}, state, { notebookList });
+    // case "UPDATE_NOTES_LIST":
+    //   let notebookList = state.notebookList;
+    //   notebookList.map(item => {
+    //     if(item.id == action.notebookId)
+    //       item["notes"] = action.notesList;
+    //   });
+    //   notebookList = _.cloneDeep(notebookList);
+    //   return Object.assign({}, state, { notebookList });
 
     default: return state;
   }
@@ -37,14 +38,6 @@ let updateNotebooks = notebookList => {
   }
 }
 
-let updateNotesList = (notebookId, notesList) => {
-  return {
-    type : "UPDATE_NOTES_LIST",
-    notebookId,
-    notesList
-  }
-}
-
 let getNotebookList = () => {
   return (dispatch) => {
       api.get('/notebooks').then(notebookList => {
@@ -54,16 +47,6 @@ let getNotebookList = () => {
       })
     }
 };
-
-let getListOfNotes = (notebookId) => {
-  return (dispatch) => {
-    api.get('/notebooks/' + notebookId + '/notes').then(notesList => {
-      dispatch(updateNotesList(notebookId, notesList));
-    }).catch(err => {
-      alert(JSON.stringify(err));
-    });
-  }
-}
 
 let createNoteBook = (notebook) => {
   return (dispatch) => {
@@ -81,7 +64,7 @@ let updateNoteBook = (notebook) => {
         dispatch(getNotebookList());
       }).catch(err => {
         alert(JSON.stringify(err));
-      })
+      });
     }
 };
 
@@ -102,7 +85,6 @@ let deleteNoteBook = (notebook) => {
 module.exports = {
   notebooks : reducer,
   getNotebookList,
-  getListOfNotes,
   createNoteBook,
   updateNoteBook,
   deleteNoteBook

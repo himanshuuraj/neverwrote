@@ -6,6 +6,7 @@ const notebooksReducer = require('./notebooks');
 /* *** TODO: Put action constants here *** */
 
 const initialState = {
+  notesObj : {}
 };
 
 // Function which takes the current data state and an action,
@@ -19,25 +20,31 @@ function reducer(state, action) {
     case "UPDATE_NOTEBOOK_LIST":
       return Object.assign({}, state, { notebookList : action.notebookList });
     case "UPDATE_NOTES_LIST":
-      let notebookList = state.notebookList;
-      notebookList.map(item => {
-        if(item.id == action.notebookId)
-          item["notes"] = action.notesList;
-      });
-      notebookList = _.cloneDeep(notebookList);
-      return Object.assign({}, state, { notebookList });
-
+      let notesObj = state.notesObj;
+      notesObj[action.notebookId] = action.notebookList;
+      notesObj = _.cloneDeep(obj);
+      return Object.assign({}, state, { notesObj : notesObj });
     default: return state;
   }
 }
 
-// let createNotes = (notebookId, notes) => {
-//   return {
-//     type : "CREATE_NOTES",
-//     notebookId,
-//     notes : notes
-//   }
-// }
+let updateNotesList = (notebookId, notesList) => {
+  return {
+    type : "UPDATE_NOTES_LIST",
+    notebookId,
+    notesList
+  }
+}
+
+let getListOfNotes = (notebookId) => {
+  return (dispatch) => {
+    api.get('/notebooks/' + notebookId + '/notes').then(notesList => {
+      dispatch(updateNotesList(notebookId, notesList));
+    }).catch(err => {
+      alert(JSON.stringify(err));
+    });
+  }
+}
 
 let createNotes = (note) => {
   return (dispatch) => {
@@ -75,5 +82,6 @@ module.exports = {
   notebooks : reducer,
   createNotes,
   updateNotes,
-  deleteNotes
+  deleteNotes,
+  getListOfNotes
 };

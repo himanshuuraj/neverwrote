@@ -4,6 +4,7 @@ const Redux = require('redux');
 
 const createActionDispatchers = require('../helpers/createActionDispatchers');
 const notebooksActionCreators = require('../reducers/notebooks');
+const notedActionCreators = require('../reducers/notes');
 
 /*
   *** TODO: Build more functionality into the NotebookList component ***
@@ -64,7 +65,7 @@ const NotebookListContainer = ReactRedux.connect(
     Redux.bindActionCreators(
       {
         getNotebookList : notebooksActionCreators.getNotebookList,
-        getListOfNotes : notebooksActionCreators.getListOfNotes
+        getListOfNotes : notedActionCreators.getListOfNotes
       },
       dispatch
     )
