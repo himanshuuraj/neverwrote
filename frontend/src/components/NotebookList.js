@@ -21,18 +21,19 @@ class NotebookList extends React.Component {
       addNotebook : false
     };
     this.onAddNotebook = this.onAddNotebook.bind(this);
+    this.onAddNotes = this.onAddNotes.bind(this);
   }
 
   componentDidMount(){
     this.props.getNotebookList();
   }
 
-  // onAddNotebook = notebook => {
-  //   this.props.createNoteBook(notebook);
-  // }
-
   onAddNotebook(notebook){
     this.props.createNoteBook(notebook);
+  }
+
+  onAddNotes(notes){
+    this.props.createNotes(notes);
   }
 
   render() {
@@ -71,15 +72,17 @@ class NotebookList extends React.Component {
             this.props.notebookList.length > 0 && 
             this.props.notebookList.map((item, index) => <div className="container"
               style={{padding: 10,backgroundColor: "antiquewhite", marginBottom : 10, borderRadius : 4}}
-              onClick={(e) => {
-                this.props.toggleNotes(item.id);
-                this.props.getListOfNotes(item.id);
-                console.log("EEEEEE", e);
-              }}
               key={index}>
                 <div className="container">
                   <div className="row">
-                    <div className="col-sm-8">
+                    <div className="col-sm-8" 
+                          onClick={(e) => {
+                            this.props.toggleNotes(item.id);
+                            this.props.getListOfNotes(item.id);
+                          }}
+                          style={{
+                            cursor : 'pointer'
+                          }}>
                       { item.title }
                     </div>
                     <div className="col-sm-4">
@@ -89,16 +92,25 @@ class NotebookList extends React.Component {
                             cursor : 'pointer'
                           }}
                           onClick={e => {
-                            
+                            this.props.toggleShowNotes(item.id);
+                            e.stopPropagation();
                           }}>
                           <u>Add Notes</u>
                         </div>
-                        <div className="col-sm-4" onClick={e => {
+                        <div className="col-sm-4"
+                        style={{
+                          cursor : 'pointer'
+                        }}
+                        onClick={e => {
                           
                         }}>
                           <u>Edit</u>
                         </div>
-                        <div className="col-sm-4" onClick={e => {
+                        <div className="col-sm-4" 
+                        style={{
+                          cursor : 'pointer'
+                        }}
+                        onClick={e => {
                           this.props.deleteNoteBook(item);
                         }}>
                           <u>Delete</u>
@@ -106,6 +118,13 @@ class NotebookList extends React.Component {
                       </div>
                     </div>
                   </div>
+                  {
+                    item.addNotes && (
+                      <div className="row">
+                        <AddEditNote onAdd={this.onAddNotes} addType={'notes'} notebookId={item.id}/>
+                      </div>
+                    )
+                  }
                   <div className="row">
                     <div className="col-sm-8">
                     {
@@ -184,7 +203,9 @@ const NotebookListContainer = ReactRedux.connect(
         toggleContent : notesActionCreators.toggleContent,
         deleteNoteBook : notebooksActionCreators.deleteNoteBook,
         deleteNotes : notesActionCreators.deleteNotes,
-        createNoteBook : notebooksActionCreators.createNoteBook
+        createNoteBook : notebooksActionCreators.createNoteBook,
+        toggleShowNotes : notebooksActionCreators.toggleShowNotes,
+        createNotes : notesActionCreators.createNotes
       },
       dispatch
     )

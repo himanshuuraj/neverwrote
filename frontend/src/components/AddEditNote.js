@@ -17,12 +17,9 @@ class AddEditNote extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      title : ''
+      title : '',
+      content : ''
     }
-  }
-
-  componentDidMount(){
-    this.props.getNotebookList();
   }
 
   render() {
@@ -61,20 +58,48 @@ class AddEditNote extends React.Component {
           }
           {
               this.props.addType == "notes" && (
-                <div className="row">
+                <div className="row form-group" style={{ marginBottom : 5, marginTop : 5 }}>
                     <div className="col-sm-5">
                       <input type="text"
+                        placeholder="Add Title"
                         onChange={e=> {
-                            console.log(e);
+                            //console.log(e.target.value);
+                            this.setState({
+                              title : e.target.value
+                            });
                         }} className="form-control"/>
                     </div>
                     <div className="col-sm-5">
-                        <textinput onChange={e=> {
-                            console.log(e);
-                        }}/>
+                      <input type="text"
+                        placeholder="Add Content"
+                        onChange={e=> {
+                            //console.log(e.target.value);
+                            this.setState({
+                              content : e.target.value
+                            });
+                        }} className="form-control"/>
                     </div>
                     <div className="col-sm-2">
-                        <u>Add</u>
+                      <button 
+                        onClick={e => {
+                          if(!this.state.title){
+                            alert("Please add tile");
+                            return;
+                          }
+                          if(!this.state.content){
+                            alert("Please add content");
+                            return;
+                          }
+                          this.props.onAdd({
+                            title : this.state.title,
+                            content : this.state.content,
+                            notebookId : this.props.notebookId
+                          });
+                        }}
+                        type="submit" 
+                        className="btn btn-default">
+                        ADD
+                      </button>
                     </div>
                 </div>
               )

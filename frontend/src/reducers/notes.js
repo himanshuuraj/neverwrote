@@ -71,7 +71,8 @@ let toggleContent = (notebookId, noteId) => {
 let createNotes = (note) => {
   return (dispatch) => {
       api.post('/notes', note).then(notebookList => {
-        dispatch(notebooksReducer.getNotebookList(note.notebookId));
+        dispatch(getListOfNotes(note.notebookId));
+        dispatch(notebooksReducer.toggleShowNotes(note.notebookId));
       }).catch(err => {
         alert(JSON.stringify(err));
       })

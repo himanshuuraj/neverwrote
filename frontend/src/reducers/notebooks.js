@@ -26,9 +26,24 @@ function reducer(state, action) {
         return item;
       });
       notebookList = _.cloneDeep(notebookList);
-      return Object.assign({}, state, { notebookList })
-
+      return Object.assign({}, state, { notebookList });
+    case "TOGGLE_ADD_NOTES":
+      notebookList = state.notebookList;
+      notebookList = notebookList.map(item => {
+        if(item.id == action.notebookId)
+          item['addNotes'] = !item["addNotes"];
+        return item;
+      });
+      notebookList = _.cloneDeep(notebookList);
+      return Object.assign({}, state, { notebookList });
     default: return state;
+  }
+}
+
+let toggleShowNotes = notebookId => {
+  return {
+    type : "TOGGLE_ADD_NOTES",
+    notebookId
   }
 }
 
@@ -51,6 +66,7 @@ let getNotebookList = () => {
       api.get('/notebooks').then(notebookList => {
         notebookList = notebookList.map(item => {
           item['showNotes'] = false;
+          item['addNotes'] = false;
           return item;
         });
         dispatch(updateNotebooks(notebookList));
@@ -100,5 +116,6 @@ module.exports = {
   createNoteBook,
   updateNoteBook,
   deleteNoteBook,
-  toggleNotes
+  toggleNotes,
+  toggleShowNotes
 };
