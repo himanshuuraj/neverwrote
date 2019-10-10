@@ -14,21 +14,59 @@ const notesActionCreators = require('../reducers/notes');
 */
 class AddEditNote extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      title : ''
+    }
+  }
+
   componentDidMount(){
     this.props.getNotebookList();
   }
 
   render() {
-
     return (
       <div className="container">
+        {
+              this.props.addType == "notebook" && (
+                <div className="row form-group">
+                    <div className="col-sm-10">
+                      <input type="text"
+                        onChange={e=> {
+                            //console.log(e.target.value);
+                            this.setState({
+                              title : e.target.value
+                            });
+                        }} className="form-control"/>
+                    </div>
+                    <div className="col-sm-2">
+                      <button 
+                        onClick={e => {
+                          if(!this.state.title){
+                            alert("Please add tile");
+                            return;
+                          }
+                          this.props.onAdd({
+                            title : this.state.title
+                          });
+                        }}
+                        type="submit" 
+                        className="btn btn-default">
+                        ADD
+                      </button>
+                    </div>
+                </div>
+              )
+          }
           {
               this.props.addType == "notes" && (
                 <div className="row">
                     <div className="col-sm-5">
-                        <textinput onChange={e=> {
+                      <input type="text"
+                        onChange={e=> {
                             console.log(e);
-                        }}/>
+                        }} className="form-control"/>
                     </div>
                     <div className="col-sm-5">
                         <textinput onChange={e=> {

@@ -5,6 +5,7 @@ const Redux = require('redux');
 const createActionDispatchers = require('../helpers/createActionDispatchers');
 const notebooksActionCreators = require('../reducers/notebooks');
 const notesActionCreators = require('../reducers/notes');
+import AddEditNote from "./AddEditNote";
 
 /*
   *** TODO: Build more functionality into the NotebookList component ***
@@ -14,8 +15,24 @@ const notesActionCreators = require('../reducers/notes');
 */
 class NotebookList extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      addNotebook : false
+    };
+    this.onAddNotebook = this.onAddNotebook.bind(this);
+  }
+
   componentDidMount(){
     this.props.getNotebookList();
+  }
+
+  // onAddNotebook = notebook => {
+  //   this.props.createNoteBook(notebook);
+  // }
+
+  onAddNotebook(notebook){
+    this.props.createNoteBook(notebook);
   }
 
   render() {
@@ -30,7 +47,25 @@ class NotebookList extends React.Component {
     return (
       <div>
         <h2>Notebooks</h2>
-        <div className="container">
+        <button type="button" 
+          className="btn btn-default" 
+          style={{ 
+            marginLeft: 15,
+            marginBottom: 10
+          }} 
+          onClick={e => {
+            this.setState({
+              addNotebook : !this.state.addNotebook
+            })
+        }}>
+          Add NoteBook
+        </button>
+        <div className="container" style={{ marginLeft : -15 }}>
+          {
+            this.state.addNotebook && (
+              <AddEditNote addType = "notebook" onAdd={this.onAddNotebook}/>
+            )
+          }
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
@@ -49,9 +84,13 @@ class NotebookList extends React.Component {
                     </div>
                     <div className="col-sm-4">
                       <div className="row">
-                        <div className="col-sm-4" onClick={e => {
-                          
-                        }}>
+                        <div className="col-sm-4" 
+                          style={{
+                            cursor : 'pointer'
+                          }}
+                          onClick={e => {
+                            
+                          }}>
                           <u>Add Notes</u>
                         </div>
                         <div className="col-sm-4" onClick={e => {
@@ -144,7 +183,8 @@ const NotebookListContainer = ReactRedux.connect(
         toggleNotes : notebooksActionCreators.toggleNotes,
         toggleContent : notesActionCreators.toggleContent,
         deleteNoteBook : notebooksActionCreators.deleteNoteBook,
-        deleteNotes : notesActionCreators.deleteNotes
+        deleteNotes : notesActionCreators.deleteNotes,
+        createNoteBook : notebooksActionCreators.createNoteBook
       },
       dispatch
     )
