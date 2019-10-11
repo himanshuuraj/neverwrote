@@ -5,7 +5,8 @@ const api = require('../helpers/api');
 /* *** TODO: Put action constants here *** */
 
 const initialState = {
-  notebookList : []
+  notebookList : [],
+  searchData : []
 };
 
 // Function which takes the current data state and an action,
@@ -45,6 +46,8 @@ function reducer(state, action) {
       });
       notebookList = _.cloneDeep(notebookList);
       return Object.assign({}, state, { notebookList });
+    case "SEARCH_DATA":
+      return Object.assign({}, state, { searchData : action.data })
     default: return state;
   }
 }
@@ -122,6 +125,16 @@ let deleteNoteBook = (notebook) => {
       })
     }
 };
+
+let searchNotebooks = (searchText) => {
+  return (dispatch) => {
+    api.get("/search/" + searchText)
+    .then(data => {
+      dispatch({type : "SEARCH_DATA", data});
+    })
+    .catch(err => alert(JSON.stringify(err)));
+  }
+}
 
 // Action creators
 /* *** TODO: Put action creators here *** */

@@ -76,6 +76,27 @@ router.put('/:notebookId', (req, res) => {
     .catch(err => res.status(500).json({ error: err.message })); 
 });
 
+router.get('/search/:searchText', (req, res) => {
+  let searchText = req.params.searchText;
+  let promise1 = models.Notebook.findAll();
+  let promise2 = models.Note.findAll();
+  Promise.all([promise1, promise2])
+  .then(data => {
+      let notebooks = [...data[0]];
+      let notes = data[1];
+      notes = notes.filter(element => element.title.includes(searchText) || element.content.includes(searchText));
+      for(let index = 0; index < notebooks.length; index++){
+        notebooks[index].notes = notes.filter(item => item.notebookId == notebooks[index].id);
+      }
+      notebooks = notebooks.filter(item => {
+        let notes = item.notes;
+        console.log(notes);
+        if(notes.length > 0) return true; else return false;
+      })
+      res.send({ notebooks : notebooks, notes : notes});
+    }).catch(err => res.status(500).json({ error: err.message }));  
+});
+
 
 
 module.exports = router;
