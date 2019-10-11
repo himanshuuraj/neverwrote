@@ -22,22 +22,33 @@ class AddEditNote extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.edit){
+      this.setState({
+        title : nextProps.notebook.title,
+        content : notebook.note.content
+      })
+    }
+  }
+
   render() {
     return (
       <div className="container">
         {
               this.props.addType == "notebook" && (
                 <div className="row form-group">
-                    <div className="col-sm-10">
+                    <div className="col-sm-8">
                       <input type="text"
                         onChange={e=> {
-                            //console.log(e.target.value);
                             this.setState({
                               title : e.target.value
                             });
-                        }} className="form-control"/>
+                        }} value={this.state.title} className="form-control"/>
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-2" style={{
+                      display: "flex",
+                      justifyContent: "center"
+                    }}>
                       <button 
                         onClick={e => {
                           if(!this.state.title){
@@ -53,6 +64,20 @@ class AddEditNote extends React.Component {
                         ADD
                       </button>
                     </div>
+                    {
+                      this.props.edit && (
+                        <div className="col-sm-2">
+                          <button 
+                            onClick={e => {
+                              this.props.toggleEditNotebook( this.props.notebookId );
+                            }}
+                            type="submit" 
+                            className="btn btn-default">
+                            CANCEL
+                          </button>
+                        </div>
+                      )
+                    }
                 </div>
               )
           }

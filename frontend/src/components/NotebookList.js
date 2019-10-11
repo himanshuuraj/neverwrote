@@ -37,13 +37,6 @@ class NotebookList extends React.Component {
   }
 
   render() {
-    const createNotebookListItem = (notebook) => {
-      return (
-        <li key={notebook.id}>
-          {notebook.title}
-        </li>
-      )
-    }
 
     return (
       <div>
@@ -73,59 +66,67 @@ class NotebookList extends React.Component {
             this.props.notebookList.map((item, index) => <div className="container"
               style={{padding: 10,backgroundColor: "antiquewhite", marginBottom : 10, borderRadius : 4}}
               key={index}>
-                <div className="container">
-                  <div className="row">
-                    <div className="col-sm-8" 
-                          onClick={(e) => {
-                            this.props.toggleNotes(item.id);
-                            this.props.getListOfNotes(item.id);
-                          }}
-                          style={{
-                            cursor : 'pointer'
-                          }}>
-                      { item.title }
-                    </div>
-                    <div className="col-sm-4">
+                {
+                  item.editNotebook ? (
+                    <div className="container">
                       <div className="row">
-                        <div className="col-sm-4" 
-                          style={{
-                            cursor : 'pointer'
-                          }}
-                          onClick={e => {
-                            this.props.toggleShowNotes(item.id);
-                            e.stopPropagation();
-                          }}>
-                          <u>Add Notes</u>
-                        </div>
-                        <div className="col-sm-4"
-                        style={{
-                          cursor : 'pointer'
-                        }}
-                        onClick={e => {
-                          
-                        }}>
-                          <u>Edit</u>
-                        </div>
-                        <div className="col-sm-4" 
-                        style={{
-                          cursor : 'pointer'
-                        }}
-                        onClick={e => {
-                          this.props.deleteNoteBook(item);
-                        }}>
-                          <u>Delete</u>
-                        </div>
+                        <AddEditNote notebook={item} edit onAdd={this.onAddNotes} addType={'notebook'} notebookId={item.id}/>
                       </div>
                     </div>
-                  </div>
-                  {
-                    item.addNotes && (
-                      <div className="row">
-                        <AddEditNote onAdd={this.onAddNotes} addType={'notes'} notebookId={item.id}/>
-                      </div>
-                    )
-                  }
-                  <div className="row">
+                  ) : (
+                      <div className="container">
+                        <div className="row">
+                                <div className="col-sm-8" 
+                                      onClick={(e) => {
+                                        this.props.toggleNotes(item.id);
+                                        this.props.getListOfNotes(item.id);
+                                      }}
+                                      style={{
+                                        cursor : 'pointer'
+                                      }}>
+                                  { item.title }
+                                </div>
+                          <div className="col-sm-4">
+                            <div className="row">
+                              <div className="col-sm-4" 
+                                style={{
+                                  cursor : 'pointer'
+                                }}
+                                onClick={e => {
+                                  this.props.toggleShowNotes(item.id);
+                                  e.stopPropagation();
+                                }}>
+                                <u>Add Notes</u>
+                              </div>
+                              <div className="col-sm-4"
+                              style={{
+                                cursor : 'pointer'
+                              }}
+                              onClick={e => {
+                                this.props.toggleEditNotebook(item.id)
+                              }}>
+                                <u>Edit</u>
+                              </div>
+                              <div className="col-sm-4" 
+                              style={{
+                                cursor : 'pointer'
+                              }}
+                              onClick={e => {
+                                this.props.deleteNoteBook(item);
+                              }}>
+                                <u>Delete</u>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {
+                          item.addNotes && (
+                            <div className="row">
+                              <AddEditNote onAdd={this.onAddNotes} addType={'notes'} notebookId={item.id}/>
+                            </div>
+                          )
+                        }
+                        <div className="row">
                     <div className="col-sm-8">
                     {
                         item.showNotes && 
@@ -179,7 +180,9 @@ class NotebookList extends React.Component {
                       }
                       </div>
                     </div>
-                </div>
+                      </div>
+                    )
+                }
               </div>
             )
         }
@@ -205,7 +208,8 @@ const NotebookListContainer = ReactRedux.connect(
         deleteNotes : notesActionCreators.deleteNotes,
         createNoteBook : notebooksActionCreators.createNoteBook,
         toggleShowNotes : notebooksActionCreators.toggleShowNotes,
-        createNotes : notesActionCreators.createNotes
+        createNotes : notesActionCreators.createNotes,
+        toggleEditNotebook : notebooksActionCreators.toggleEditNotebook
       },
       dispatch
     )
