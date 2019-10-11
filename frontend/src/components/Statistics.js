@@ -21,15 +21,17 @@ class Statistics extends React.Component {
 
   render() {
     return (
-      <div>
-          <button type="button" className="btn btn-primary"
-            onClick={e => {
-                this.props.getStatistics();
-            }}>
-              Refresh
-          </button>
+      <div style={{ borderWidth : 1, borderColor : 'black', borderRadius : 8, padding : 15, border : '1px solid black', marginTop : 80}}>
+          <div style={{marginLeft : 15, marginBottom : 10}}>
+            <button type="button" className="btn btn-primary"
+              onClick={e => {
+                  this.props.getStatistics();
+              }}>
+                Refresh
+            </button>
+          </div>
           <div className="container">
-            <div className="row">
+            <div className="row" style={{ height : 25}}>
                 <div className="col-sm-6">
                     Note Count
                 </div>
@@ -37,7 +39,7 @@ class Statistics extends React.Component {
                     { this.props.numberOfNotes }
                 </div>
             </div>
-            <div className="row">
+            <div className="row" style={{ height : 25}}>
                 <div className="col-sm-6">
                     Notebook Count
                 </div>
@@ -45,7 +47,7 @@ class Statistics extends React.Component {
                     { this.props.numberOfNotebooks }
                 </div>
             </div>
-            <div className="row">
+            <div className="row" style={{ height : 25}}>
                 <div className="col-sm-6">
                     Oldest Notebook
                 </div>
@@ -53,7 +55,7 @@ class Statistics extends React.Component {
                 { this.props.oldestNotebook.title }
                 </div>
             </div>
-            <div className="row">
+            <div className="row" style={{ height : 25}}>
                 <div className="col-sm-6">
                     Recently Updated Note
                 </div>

@@ -42,19 +42,18 @@ class NotebookList extends React.Component {
     return (
       <div>
         <h2>Notebooks</h2>
-        <button type="button" 
-          className="btn btn-default" 
-          style={{ 
-            marginLeft: 15,
-            marginBottom: 10
-          }} 
-          onClick={e => {
-            this.setState({
-              addNotebook : !this.state.addNotebook
-            })
-        }}>
-          Add NoteBook
-        </button>
+            <button type="button" 
+              className="btn btn-default" 
+              style={{
+                marginBottom: 10
+              }} 
+              onClick={e => {
+                this.setState({
+                  addNotebook : !this.state.addNotebook
+                })
+            }}>
+              Add NoteBook
+            </button>
         <div className="form-group" style={{
           marginBottom : 10
         }}>
@@ -66,6 +65,7 @@ class NotebookList extends React.Component {
           }}
            placeholder="Search across all notebook and notes"/>
         </div>
+        
         <div className="container" style={{ marginLeft : -15 }}>
           {
             this.state.addNotebook && (
@@ -87,8 +87,8 @@ class NotebookList extends React.Component {
                       </div>
                     </div>
                   ) : (
-                      <div className="container">
-                        <div className="row">
+                      <div className="row">
+                        <div className="row" style={{paddingLeft : 30}}>
                           <div className="col-sm-8" 
                                 onClick={(e) => {
                                   this.props.toggleNotes(item.id);
@@ -97,7 +97,7 @@ class NotebookList extends React.Component {
                                 style={{
                                   cursor : 'pointer'
                                 }}>
-                            { item.title }
+                            <u>{ item.title }</u>
                           </div>
                           <div className="col-sm-4">
                             <div className="row">
@@ -139,8 +139,7 @@ class NotebookList extends React.Component {
                             </div>
                           )
                         }
-                        <div className="row">
-                          <div className="col-sm-8">
+                        <div className="row" style={{ marginLeft : 25, marginRight : 25 }}>
                           {
                               item.showNotes && 
                                 this.props.notesObj[item.id] &&
@@ -151,15 +150,15 @@ class NotebookList extends React.Component {
                                       return false;
                                     })
                                     .map((note, index1) => (
-                                    <div className="container" onClick={(e) => {
+                                    <div className="container-fluid" onClick={(e) => {
                                       this.props.toggleContent(item.id, note.id);
                                       e.stopPropagation();
                                     }}
-                                    key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
-                                      <div className="container">
+                                    key={index1} style={{padding: 10, border: "1px solid blue", marginTop : 10, borderRadius : 4}}>
+                                      <div className="container-fluid">
                                         <div className="row">
                                           <div className="col-sm-8">
-                                            { note.title }
+                                            <u>{ note.title }</u>
                                           </div>
                                           <div className="col-sm-4">
                                             <div className="row">
@@ -176,11 +175,16 @@ class NotebookList extends React.Component {
                                               </div>
                                           </div>
                                         </div>
-                                        <div className="row">
+                                        </div>
+                                        <div className="row" style={{
+                                          backgroundColor: '#bbb',
+                                          borderRadius: 4,
+                                          marginTop: 8,
+                                          paddingLeft: 4
+                                        }}>
                                             {
                                               note.showContent && (
                                                 <div style={{
-                                                  background: 'beige',
                                                   padding: 10
                                                 }}
                                                 onClick={(e) => {
@@ -190,14 +194,12 @@ class NotebookList extends React.Component {
                                                 </div>
                                               )
                                             }
-                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   )
                                 )
                             }
-                            </div>
                           </div>
                       </div>
                     )
