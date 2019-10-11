@@ -18,7 +18,8 @@ class NotebookList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      addNotebook : false
+      addNotebook : false,
+      searchText : ""
     };
     this.onAddNotebook = this.onAddNotebook.bind(this);
     this.onAddNotes = this.onAddNotes.bind(this);
@@ -54,6 +55,17 @@ class NotebookList extends React.Component {
         }}>
           Add NoteBook
         </button>
+        <div className="form-group" style={{
+          marginBottom : 10
+        }}>
+          <input type="text" className="form-control"
+          onChange = {e => {
+            this.setState({
+              searchText : e.target.value
+            })
+          }}
+           placeholder="Search across all notebook and notes"/>
+        </div>
         <div className="container" style={{ marginLeft : -15 }}>
           {
             this.state.addNotebook && (
@@ -63,7 +75,8 @@ class NotebookList extends React.Component {
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
-            this.props.notebookList.map((item, index) => <div className="container"
+            this.props.notebookList
+              .map((item, index) => <div className="container"
               style={{padding: 10,backgroundColor: "antiquewhite", marginBottom : 10, borderRadius : 4}}
               key={index}>
                 {
@@ -76,16 +89,16 @@ class NotebookList extends React.Component {
                   ) : (
                       <div className="container">
                         <div className="row">
-                                <div className="col-sm-8" 
-                                      onClick={(e) => {
-                                        this.props.toggleNotes(item.id);
-                                        this.props.getListOfNotes(item.id);
-                                      }}
-                                      style={{
-                                        cursor : 'pointer'
-                                      }}>
-                                  { item.title }
-                                </div>
+                          <div className="col-sm-8" 
+                                onClick={(e) => {
+                                  this.props.toggleNotes(item.id);
+                                  this.props.getListOfNotes(item.id);
+                                }}
+                                style={{
+                                  cursor : 'pointer'
+                                }}>
+                            { item.title }
+                          </div>
                           <div className="col-sm-4">
                             <div className="row">
                               <div className="col-sm-4" 
@@ -127,59 +140,65 @@ class NotebookList extends React.Component {
                           )
                         }
                         <div className="row">
-                    <div className="col-sm-8">
-                    {
-                        item.showNotes && 
-                          this.props.notesObj[item.id] &&
-                            this.props.notesObj[item.id].map((note, index1) => (
-                              <div className="container" onClick={(e) => {
-                                this.props.toggleContent(item.id, note.id);
-                                e.stopPropagation();
-                              }}
-                              key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
-                                <div className="container">
-                                  <div className="row">
-                                    <div className="col-sm-8">
-                                      { note.title }
-                                    </div>
-                                    <div className="col-sm-4">
-                                      <div className="row">
-                                        <div className="col-sm-6" onClick={e => {
-                                          
-                                        }}>
-                                          <u>Edit</u>
-                                        </div>
-                                        <div className="col-sm-6" onClick={e => {
-                                          e.stopPropagation();
-                                          this.props.deleteNotes(note);
-                                        }}>
-                                          <u>Delete</u>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div className="row">
-                                      {
-                                        note.showContent && (
-                                          <div style={{
-                                            background: 'beige',
-                                            padding: 10
-                                          }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                          }}>
-                                            { note.content }
+                          <div className="col-sm-8">
+                          {
+                              item.showNotes && 
+                                this.props.notesObj[item.id] &&
+                                  this.props.notesObj[item.id]
+                                    .filter(item => {
+                                      if(item.title.includes(this.state.searchText)) return true;
+                                      if(item.content.includes(this.state.searchText)) return true;
+                                      return false;
+                                    })
+                                    .map((note, index1) => (
+                                    <div className="container" onClick={(e) => {
+                                      this.props.toggleContent(item.id, note.id);
+                                      e.stopPropagation();
+                                    }}
+                                    key={index1} style={{padding: 10, backgroundColor: "lightblue", marginTop : 10, borderRadius : 4}}>
+                                      <div className="container">
+                                        <div className="row">
+                                          <div className="col-sm-8">
+                                            { note.title }
                                           </div>
-                                        )
-                                      }
+                                          <div className="col-sm-4">
+                                            <div className="row">
+                                              <div className="col-sm-6" onClick={e => {
+                                                
+                                              }}>
+                                                <u>Edit</u>
+                                              </div>
+                                              <div className="col-sm-6" onClick={e => {
+                                                e.stopPropagation();
+                                                this.props.deleteNotes(note);
+                                              }}>
+                                                <u>Delete</u>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <div className="row">
+                                            {
+                                              note.showContent && (
+                                                <div style={{
+                                                  background: 'beige',
+                                                  padding: 10
+                                                }}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                }}>
+                                                  { note.content }
+                                                </div>
+                                              )
+                                            }
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          )
-                      }
-                      </div>
-                    </div>
+                                  )
+                                )
+                            }
+                            </div>
+                          </div>
                       </div>
                     )
                 }

@@ -54,14 +54,14 @@ let getRecentlyUpdatedNote = arr => {
 
 const getStatistics = () => {
   return (dispatch) => {
-    let getNumberOfNotebooks = api.get('/notebooks');
-    let getNumberOfNotes = api.get('/notes');
-    Promise.all([getNumberOfNotebooks, getNumberOfNotes]).then(data => {
-      let numberOfNotebooks = data[0].length;
-      let numberOfNotes = data[1].length;
-      let oldestNotebook = getOldestNotebook(data[0]);
-      let recentlyUpdatedNote = getRecentlyUpdatedNote(data[1]);
-      dispatch({ type : "UPDATE_STATS", numberOfNotebooks, numberOfNotes, oldestNotebook, recentlyUpdatedNote });
+    api.get('/stat').then(data => {
+      dispatch({ 
+        type : "UPDATE_STATS", 
+        numberOfNotebooks : data.numberOfNotebooks, 
+        numberOfNotes : data.numberOfNotes, 
+        oldestNotebook : data.oldestNotebook, 
+        recentlyUpdatedNote : data.recentlyUpdatedNote 
+      });
     }).catch(err => {
       console.log(err);
     })

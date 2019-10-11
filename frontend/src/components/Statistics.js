@@ -42,7 +42,7 @@ class Statistics extends React.Component {
                     Notebook Count
                 </div>
                 <div className="col-sm-6">
-                { this.props.numberOfNotebooks }
+                    { this.props.numberOfNotebooks }
                 </div>
             </div>
             <div className="row">

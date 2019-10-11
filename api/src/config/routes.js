@@ -1,6 +1,7 @@
 const index = require('../controllers/index');
 const notebooks = require('../controllers/notebooks');
 const notes = require('../controllers/notes');
+const statistics = require("./../controllers/stat");
 
 const routes = {};
 
@@ -12,6 +13,7 @@ routes.connect = (app) => {
   app.use('/', index);
   app.use('/notebooks', notebooks);
   app.use('/notes', notes);
+  app.use('/stat', statistics);
 };
 
 module.exports = routes;
