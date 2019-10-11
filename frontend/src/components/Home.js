@@ -8,6 +8,8 @@ const React = require('react');
 
 const NotebookList = require('./NotebookList');
 
+const StatisticsContainer = require("./Statistics");
+
 /*
   *** TODO: Start building the frontend from here ***
   You should remove the placeholder text and modify the component as you see
@@ -20,6 +22,7 @@ const Home = () => (
       This placeholder text was rendered by the <code>Home</code> component.
     </p>
     <NotebookList />
+    <StatisticsContainer />
   </div>
 );
 
