@@ -6,7 +6,7 @@ const api = require('../helpers/api');
 
 const initialState = {
   notebookList : [],
-  searchData : []
+  searchData : {}
 };
 
 // Function which takes the current data state and an action,
@@ -128,7 +128,7 @@ let deleteNoteBook = (notebook) => {
 
 let searchNotebooks = (searchText) => {
   return (dispatch) => {
-    api.get("/search/" + searchText)
+    api.get("/notebooks/search/" + searchText)
     .then(data => {
       dispatch({type : "SEARCH_DATA", data});
     })
@@ -148,5 +148,6 @@ module.exports = {
   deleteNoteBook,
   toggleNotes,
   toggleShowNotes,
-  toggleEditNotebook
+  toggleEditNotebook,
+  searchNotebooks
 };

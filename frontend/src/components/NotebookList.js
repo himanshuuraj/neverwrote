@@ -6,6 +6,7 @@ const createActionDispatchers = require('../helpers/createActionDispatchers');
 const notebooksActionCreators = require('../reducers/notebooks');
 const notesActionCreators = require('../reducers/notes');
 import AddEditNote from "./AddEditNote";
+import SearchList from "./SearchList";
 
 /*
   *** TODO: Build more functionality into the NotebookList component ***
@@ -66,12 +67,14 @@ class NotebookList extends React.Component {
             onChange = {e => {
               this.setState({
                 searchText : e.target.value
-              })
+              });
+              this.props.searchNotebooks(e.target.value);
             }}
             placeholder="Search across all notebook and notes"/>
           </div>
-        
-        <div className="container" style={{ marginLeft : -15 }}>
+        {
+            !this.state.searchText ? (
+              <div className="container" style={{ marginLeft : -15 }}>
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
@@ -208,6 +211,8 @@ class NotebookList extends React.Component {
             )
         }
         </div>
+            ): <SearchList />
+        }
       </div>
     );
   }
@@ -230,7 +235,8 @@ const NotebookListContainer = ReactRedux.connect(
         createNoteBook : notebooksActionCreators.createNoteBook,
         toggleShowNotes : notebooksActionCreators.toggleShowNotes,
         createNotes : notesActionCreators.createNotes,
-        toggleEditNotebook : notebooksActionCreators.toggleEditNotebook
+        toggleEditNotebook : notebooksActionCreators.toggleEditNotebook,
+        searchNotebooks : notebooksActionCreators.searchNotebooks
       },
       dispatch
     )
