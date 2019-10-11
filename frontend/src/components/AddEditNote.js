@@ -37,8 +37,9 @@ class AddEditNote extends React.Component {
         {
               this.props.addType == "notebook" && (
                 <div className="row form-group">
-                    <div className="col-sm-8">
+                    <div className="col-sm-10">
                       <input type="text"
+                        placeholder="Add title"
                         onChange={e=> {
                             this.setState({
                               title : e.target.value
@@ -50,6 +51,9 @@ class AddEditNote extends React.Component {
                       justifyContent: "center"
                     }}>
                       <button 
+                        style={{
+                          width : '100%'
+                        }}
                         onClick={e => {
                           if(!this.state.title){
                             alert("Please add tile");

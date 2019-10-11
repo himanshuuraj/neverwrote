@@ -54,24 +54,24 @@ class NotebookList extends React.Component {
             }}>
               Add NoteBook
             </button>
-        <div className="form-group" style={{
-          marginBottom : 10
-        }}>
-          <input type="text" className="form-control"
-          onChange = {e => {
-            this.setState({
-              searchText : e.target.value
-            })
-          }}
-           placeholder="Search across all notebook and notes"/>
-        </div>
-        
-        <div className="container" style={{ marginLeft : -15 }}>
-          {
+            {
             this.state.addNotebook && (
               <AddEditNote addType = "notebook" onAdd={this.onAddNotebook}/>
             )
           }
+          <div className="form-group" style={{
+            marginBottom : 10
+          }}>
+            <input type="text" className="form-control"
+            onChange = {e => {
+              this.setState({
+                searchText : e.target.value
+              })
+            }}
+            placeholder="Search across all notebook and notes"/>
+          </div>
+        
+        <div className="container" style={{ marginLeft : -15 }}>
         {
             this.props.notebookList &&
             this.props.notebookList.length > 0 && 
