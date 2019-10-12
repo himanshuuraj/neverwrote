@@ -81,7 +81,7 @@ let createNotes = (note) => {
 
 let updateNotes = (note) => {
   return (dispatch) => {
-      api.put('/'+ note.id , note).then(notebookList => {
+      api.put('/notes/'+ note.id , note).then(notebookList => {
         dispatch(notebooksReducer.getNotebookList(note.notebookId));
       }).catch(err => {
         alert(JSON.stringify(err));

@@ -7,6 +7,7 @@ const notebooksActionCreators = require('../reducers/notebooks');
 const notesActionCreators = require('../reducers/notes');
 import AddEditNote from "./AddEditNote";
 import SearchList from "./SearchList";
+import EditComponent from "./EditComponent";
 
 /*
   *** TODO: Build more functionality into the NotebookList component ***
@@ -119,7 +120,10 @@ class NotebookList extends React.Component {
                                 cursor : 'pointer'
                               }}
                               onClick={e => {
-                                this.props.toggleEditNotebook(item.id)
+                                let obj = item;
+                                obj['type'] = 'notebook';
+                                this.props.toggleEditComponent(true, obj );
+                                e.stopPropagation();
                               }}>
                                 <u>Edit</u>
                               </div>
@@ -166,7 +170,11 @@ class NotebookList extends React.Component {
                                           <div className="col-sm-4">
                                             <div className="row">
                                               <div className="col-sm-6" onClick={e => {
-                                                
+                                                let obj = note;
+                                                obj['type'] = 'note';
+                                                obj['notebookId'] = item.id;
+                                                this.props.toggleEditComponent(true, obj );
+                                                e.stopPropagation();
                                               }}>
                                                 <u>Edit</u>
                                               </div>
@@ -213,6 +221,7 @@ class NotebookList extends React.Component {
         </div>
             ): <SearchList />
         }
+        <EditComponent />
       </div>
     );
   }
@@ -236,7 +245,8 @@ const NotebookListContainer = ReactRedux.connect(
         toggleShowNotes : notebooksActionCreators.toggleShowNotes,
         createNotes : notesActionCreators.createNotes,
         toggleEditNotebook : notebooksActionCreators.toggleEditNotebook,
-        searchNotebooks : notebooksActionCreators.searchNotebooks
+        searchNotebooks : notebooksActionCreators.searchNotebooks,
+        toggleEditComponent : notebooksActionCreators.toggleEditComponent
       },
       dispatch
     )

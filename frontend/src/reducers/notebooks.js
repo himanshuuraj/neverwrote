@@ -6,7 +6,9 @@ const api = require('../helpers/api');
 
 const initialState = {
   notebookList : [],
-  searchData : {}
+  searchData : {},
+  showEditPopUp : false,
+  updateObj : {}
 };
 
 // Function which takes the current data state and an action,
@@ -47,8 +49,18 @@ function reducer(state, action) {
       notebookList = _.cloneDeep(notebookList);
       return Object.assign({}, state, { notebookList });
     case "SEARCH_DATA":
-      return Object.assign({}, state, { searchData : action.data })
+      return Object.assign({}, state, { searchData : action.data });
+    case "TOGGLE_EDIT_COMPONENT":
+      return Object.assign({}, state, { showEditPopUp : action.flag, updateObj : action.obj });
     default: return state;
+  }
+}
+
+let toggleEditComponent = (flag, obj)  => {
+  return {
+    type : "TOGGLE_EDIT_COMPONENT",
+    flag,
+    obj
   }
 }
 
@@ -108,7 +120,10 @@ let createNoteBook = (notebook) => {
 
 let updateNoteBook = (notebook) => {
   return (dispatch) => {
-      api.put('/notebooks/'+ notebook.id).then(notebook => {
+      let obj = {
+        title : notebook.title
+      }
+      api.put('/notebooks/'+ notebook.id, obj).then(notebook => {
         dispatch(getNotebookList());
       }).catch(err => {
         alert(JSON.stringify(err));
@@ -149,5 +164,6 @@ module.exports = {
   toggleNotes,
   toggleShowNotes,
   toggleEditNotebook,
-  searchNotebooks
+  searchNotebooks,
+  toggleEditComponent
 };
