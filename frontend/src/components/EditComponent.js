@@ -33,6 +33,7 @@ class EditComponent extends React.Component {
         if(!this.props.showEditPopUp)
             return null;
         return (<div style={{
+                zIndex : 999,
                 position: 'fixed', left : 0, top: 0, width : '100%', 
                 height : '100%', backgroundColor : 'rgb(0,0,0,0.8)',
                 display : 'flex',
