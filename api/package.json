@@ -11,7 +11,7 @@
     "express": "4.15.3",
     "lodash": "4.17.4",
     "mysql": "2.13.0",
-    "sequelize": "3.30.4"
+    "sequelize": "6.3.5"
   },
   "devDependencies": {
     "jasmine": "2.8.0",
